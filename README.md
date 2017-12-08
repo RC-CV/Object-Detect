@@ -29,13 +29,13 @@
  * 与电控组合作调试
 ## 2.所需相关应用
  *  **关键软件**
+ <a target="_blank">
 	 * [**Anaconda**](https://www.anaconda.com/download/)  : 主要用于管理安装包
 	 * [**Git**](https://git-scm.com/) : 配合github，管理项目
 	 * Jupyter notebook: 用于即时代码运行显示、文档记录以及图表展示
  *  **辅助软件**
 	 * [**Lantern**](https://getlantern.org/en_US/) : 翻墙软件
 	 * Spyder : 可选的代码运行环境，和Jupyter notebook 类似，能够搜索各种数据分析包的参考文档
- *  **使用的框架**
  	* [**Tensorflow**](http://www.tensorfly.cn/):google开源的深度学习框架
 ## 3.安装包
 **使用Anaconda创建一个环境后安装以下安装包**
@@ -61,3 +61,17 @@
  * [斯坦福深度学习课程](http://study.163.com/course/introduction/1004697005.htm)
  * [深度学习的中文资源，教程推荐](http://mp.weixin.qq.com/s/op_bWAF5u2kGPJs8V1oR5g)
  * [从零开始用TensorFlow搭建卷积神经网络](http://mp.weixin.qq.com/s/VlvQmrS7Qi2qq6fTBXKTYw)
+
+
+</a>
+
+
+
+
+
+
+
+
+
+
+
