@@ -29,7 +29,6 @@
  * 与电控组合作调试
 ## 2.所需相关应用
  *  **关键软件**
- <a target="_blank">
 	 * [**Anaconda**](https://www.anaconda.com/download/)  : 主要用于管理安装包
 	 * [**Git**](https://git-scm.com/) : 配合github，管理项目
 	 * Jupyter notebook: 用于即时代码运行显示、文档记录以及图表展示
@@ -61,17 +60,3 @@
  * [斯坦福深度学习课程](http://study.163.com/course/introduction/1004697005.htm)
  * [深度学习的中文资源，教程推荐](http://mp.weixin.qq.com/s/op_bWAF5u2kGPJs8V1oR5g)
  * [从零开始用TensorFlow搭建卷积神经网络](http://mp.weixin.qq.com/s/VlvQmrS7Qi2qq6fTBXKTYw)
-
-
-</a>
-
-
-
-
-
-
-
-
-
-
-
