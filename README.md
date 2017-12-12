@@ -46,6 +46,7 @@
  * Scipy: 基于Numpy的进一步拓展包
  * Scikit-learn: 机器学习库(基于Numpy、Scipy、matplotlib）
  * Keras: 基于tensorflow的深度学习框架
+ * Pandas: python的数据分析库
 ## 4.相关文献资料
 
  * [Anaconda 下载地址](https://www.anaconda.com/download/) 
