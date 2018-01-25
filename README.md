@@ -5,6 +5,13 @@
 * 识别的内容:**位置**以及**颜色**
 * 识别的对象:**绣球**以及**圆环**
 
+**本周任务：方案选择**
+ * [_各类算法比较-知乎(内含对应源码链接)_](https://www.zhihu.com/question/26493945)
+_Focal Loss算法 (2017年最新成果)_
+ * [_中文解说_](http://blog.csdn.net/wishchin/article/details/77460883)
+ * [_论文源地址_](https://arxiv.org/abs/1708.02002)
+ * [_可执行源码地址_](https://github.com/fizyr/keras-retinanet)
+
 **目录**
  * [_1.流程及要求_](#1流程及要求)
  * [_2.所需相关应用_](#2所需相关应用)
