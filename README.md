@@ -5,14 +5,21 @@
 * 识别的内容:**位置**以及**颜色**
 * 识别的对象:**绣球**以及**圆环**
 
-**本周任务：方案选择**
- * [_各类算法比较-知乎(内含对应源码链接)_](https://www.zhihu.com/question/26493945)
+**本周任务：方案选择，学习使用git和github以及Linux命令**
+ * 1.方案选择
+   * [_各类算法比较-知乎(内含对应源码链接)_](https://www.zhihu.com/question/26493945)
 
-_Focal Loss算法 (2017年最新成果)_
+    _Focal Loss算法 (2017年最新成果)_
 
- * [_中文解说_](http://blog.csdn.net/wishchin/article/details/77460883)
- * [_论文源地址_](https://arxiv.org/abs/1708.02002)
- * [_可执行源码地址_](https://github.com/fizyr/keras-retinanet)
+    * [_中文解说_](http://blog.csdn.net/wishchin/article/details/77460883)
+    * [_论文源地址_](https://arxiv.org/abs/1708.02002)
+    * [_可执行源码地址_](https://github.com/fizyr/keras-retinanet)
+ * 2.Linux/git/github学习（Udacity中有课程）
+ * 3.Ubuntu(Linux系统) 开发环境配置<br>
+ [_说明文档包含：_](https://github.com/RC-CV/Object-Detect/blob/master/Ubuntu_soft_ware_setting.txt)
+   * 安装sublime text 3 （文本编辑器）
+   * 安装git
+   * 安装Anaconda
 
 **目录**
  * [_1.流程及要求_](#1流程及要求)
