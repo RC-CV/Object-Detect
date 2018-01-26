@@ -1,0 +1,48 @@
+Ubuntu软件装载配置：
+
+[1] Sublime:
+
+	1)Download (apt method):(https://www.sublimetext.com/docs/3/linux_repositories.html#apt)
+
+		验证安装成功：
+		
+		测试命令能否打开sublime
+		#subl
+
+	2)中文输入设置：(https://github.com/lyfeyaj/sublime-text-imfix)
+
+[2] git:
+
+	1)Download:
+		# add-apt-repository ppa:git-core/ppa 
+		# apt update
+		# apt install git
+
+		验证安装成功
+		是否显示git版本
+		#git --version
+
+	2)设置git的文档编辑器--设为sublime
+
+		#git config --global core.editor "subl -n -w"
+
+	3)设置git登录github一次后记住密码，自动登录
+		
+		3.1)
+		打开设置文档：
+		#subl ~/.gitconfig
+		3.2)
+		文档最后添加：
+----------------------------------------
+[credential]  
+    	helper = store
+----------------------------------------
+
+[3] Anaconda:
+
+	1)Download(https://www.anaconda.com/download/#linux)
+		1.1)点击下载，下载deb文件
+		1.2)终端输入命令执行安装:
+
+			cd 到安装包的目录
+			dpkg -i 安装包名字
