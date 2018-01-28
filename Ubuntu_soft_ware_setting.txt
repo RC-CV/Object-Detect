@@ -1,5 +1,7 @@
 Ubuntu软件装载配置：
 
+注意：本文中的所有#开头代表在终端中输入命令，<>代表可以替代的内容
+
 [1] Sublime:
 
 	1)Download (apt method):(https://www.sublimetext.com/docs/3/linux_repositories.html#apt)
@@ -37,6 +39,38 @@ Ubuntu软件装载配置：
 [credential]  
     	helper = store
 ----------------------------------------
+	4)设置终端自动显示branch状态：
+		4.1)创建.git-prompt.sh文件
+			
+			1.创建空文件：#subl ~/.git-prompt.sh
+			2.打开文件：	#subl /usr/lib/git-core/git-sh-prompt
+			3.把git-sh-prompt复制到.git-prompt.sh中，保存文件
+
+		4.2)创建.git-modi-prompt.sh文件
+
+			1.创建空文件：#subl ~/.git-modi-prompt.sh
+			2.粘贴一下代码到文件中（粘贴后请把前面的缩进去掉）
+			#用于提示是否有更改而未commit的内容
+
+			find_git_dirty() {
+			  local status=$(git status --porcelain 2> /dev/null)
+			  if [[ "$status" != "" ]]; then
+			    git_dirty='*'
+			  else
+			    git_dirty=''
+			  fi
+			}
+
+			PROMPT_COMMAND="find_git_dirty; $PROMPT_COMMAND"
+
+
+		4.3)打开.bashrc配置文件
+			#subl ~/.bashrc
+		4.4）在文件末尾添加：
+			source ~/.git-prompt.sh
+			source ~/.git-modi-prompt.sh
+			source /usr/share/bash-completion/completions/git
+			export PS1="\[\033[01;32m\]\u@\h\[\033[00m\]:"'$(__git_ps1 " (\[\033[01;31m\]%s\[\033[00m\] $git_dirty)")'"\[\033[01;34m\]\w\[\033[00m\]\$ "
 
 [3] Anaconda:
 
@@ -44,5 +78,5 @@ Ubuntu软件装载配置：
 		1.1)点击下载，下载deb文件
 		1.2)终端输入命令执行安装:
 
-			cd 到安装包的目录
-			dpkg -i 安装包名字
+			#cd <安装包的目录>
+			#dpkg -i <安装包名字>
