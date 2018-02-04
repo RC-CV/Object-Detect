@@ -7,7 +7,6 @@
 
 **本周任务：细读siamFC论文，看完udacity的git和github以及Linux命令**
  * 1.细读siamFC论文
- <br>
    * [_siamFC的主页_](http://www.robots.ox.ac.uk/~luca/siamese-fc.html)
    * [_siamFC的论文_](https://arxiv.org/pdf/1606.09549.pdf)
    * [_siamFC的源代码_](https://github.com/bertinetto/siamese-fc)
