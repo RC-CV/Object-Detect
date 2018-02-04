@@ -5,21 +5,22 @@
 * 识别的内容:**位置**以及**颜色**
 * 识别的对象:**绣球**以及**圆环**
 
-**本周任务：方案选择，学习使用git和github以及Linux命令**
- * 1.方案选择
-   * [_各类算法比较-知乎(内含对应源码链接)_](https://www.zhihu.com/question/26493945)
+**本周任务：细读siamFC论文，看完udacity的git和github以及Linux命令**
+ * 1.细读siamFC论文
+   * [_siamFC的主页_](http://www.robots.ox.ac.uk/~luca/siamese-fc.html)
+   * [_siamFC的论文_](https://arxiv.org/pdf/1606.09549.pdf)
+   * [_siamFC的源代码_](https://github.com/bertinetto/siamese-fc)
+   * [_siamFC的介绍视频_](https://www.youtube.com/watch?v=jZoUalMMZ_0)
+   
+    （另外补充一个公开课，浙江大学王蒙蒙关于目标跟踪的介绍）
+    * [_公开课视频_](http://cvmart.net/community/article/detail/40)
+    * [_知乎专栏_](https://zhuanlan.zhihu.com/visual-tracking)
+    * [_推荐的入门论文1_](https://pdfs.semanticscholar.org/59e5/b451055963f5e2b16e10958f806edf2b196f.pdf)
+    * [_推荐的入门论文2_](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Nam_Learning_Multi-Domain_Convolutional_CVPR_2016_paper.pdf)
+    
+ * 2.看完Linux/git/github学习（Udacity中有课程）
 
-    _Focal Loss算法 (2017年最新成果)_
 
-    * [_中文解说_](http://blog.csdn.net/wishchin/article/details/77460883)
-    * [_论文源地址_](https://arxiv.org/abs/1708.02002)
-    * [_可执行源码地址_](https://github.com/fizyr/keras-retinanet)
- * 2.Linux/git/github学习（Udacity中有课程）
- * 3.Ubuntu(Linux系统) 开发环境配置<br>
- [_说明文档包含：_](https://github.com/RC-CV/Object-Detect/blob/master/Ubuntu_soft_ware_setting.txt)
-   * 安装sublime text 3 （文本编辑器）
-   * 安装git
-   * 安装Anaconda
 
 **目录**
  * [_1.流程及要求_](#1流程及要求)
