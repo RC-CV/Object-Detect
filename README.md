@@ -7,18 +7,16 @@
 
 **本周任务：细读siamFC论文，看完udacity的git和github以及Linux命令**
  * 1.细读siamFC论文
-   * [_siamFC的主页_](http://www.robots.ox.ac.uk/~luca/siamese-fc.html)
-   * [_siamFC的论文_](https://arxiv.org/pdf/1606.09549.pdf)
-   * [_siamFC的源代码_](https://github.com/bertinetto/siamese-fc)
-   * [_siamFC的介绍视频_](https://www.youtube.com/watch?v=jZoUalMMZ_0)
-   
-    （另外补充一个公开课，浙江大学王蒙蒙关于目标跟踪的介绍）
-    * [_公开课视频_](http://cvmart.net/community/article/detail/40)
-    * [_知乎专栏_](https://zhuanlan.zhihu.com/visual-tracking)
-    * [_推荐的入门论文1_](https://pdfs.semanticscholar.org/59e5/b451055963f5e2b16e10958f806edf2b196f.pdf)
-    * [_推荐的入门论文2_](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Nam_Learning_Multi-Domain_Convolutional_CVPR_2016_paper.pdf)
-    
+   * [_主页_](http://www.robots.ox.ac.uk/~luca/siamese-fc.html) 
+   * [_论文_](https://arxiv.org/pdf/1606.09549.pdf) 
+   * [_源代码_](https://github.com/bertinetto/siamese-fc) 
+   * [_介绍视频_](https://www.youtube.com/watch?v=jZoUalMMZ_0) 
  * 2.看完Linux/git/github学习（Udacity中有课程）
+ * 3.补充资料（公开课，浙江大学王蒙蒙关于目标跟踪的介绍）
+   * [_公开课视频_](http://cvmart.net/community/article/detail/40)
+   * [_知乎专栏_](https://zhuanlan.zhihu.com/visual-tracking)
+   * [_推荐的入门论文1_](https://pdfs.semanticscholar.org/59e5/b451055963f5e2b16e10958f806edf2b196f.pdf)
+   * [_推荐的入门论文2_](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Nam_Learning_Multi-Domain_Convolutional_CVPR_2016_paper.pdf)
 
 
 
