@@ -1,0 +1,123 @@
+本文是为了优化git的使用环境而写
+
+内容全为自行摸索的结果，花费很多心思，若要用于外界发表，请说明本文出处
+
+作者：吴嘉润 Email：ben_wu@qq.com
+
+最终优化结果：
+	在进入git的repo时把shell的开头修改成：
+		git用户名@repo的名称（分支名及*与+号提示符合）:路径$
+		(效果图见“git_env_setup.png”)
+		
+优化步骤：
+	
+	1.编写程序获得当前是否有修改与是否有未commit内容。
+	2.编写程序判断当前的文件夹是否为git的repo以及repo的名称。
+	3.调用git自带的查找branch的程序
+	4.在.bashrc文件中调用前面写好的程序，设置显示的shell开头。
+
+1.创建文件.git-modi-prompt.sh，在里面写入一下内容（路径可自行修改，但为了和后面吻合建议用~/作为路径）
+---------------------------------------------------------------------------
+
+#!/bin/bash
+#用于提示是否有已经staged但更改而未commit的内容
+find_git_dirty_commit() {
+  local commit=$(git diff --staged 2> /dev/null)
+  if [[ "$commit" != "" ]]; then
+    git_not_commit='+'
+  else
+    git_not_commit=''
+  fi
+}
+
+#用于提示是否有已经修改但未放入stage的内容
+find_git_dirty_stage() {
+  local stage=$(git diff  2> /dev/null)
+  local status=$(git status --porcelain  2> /dev/null)
+  local commit=$(git diff --staged 2> /dev/null)
+
+# "$stage" -eq ""&&"$commit" -eq ""&&"$status" -ne ""
+  local untrack=false
+  if [[ "$stage" = ""&&"$commit" = ""&&"$status" != "" ]]; then
+    untrack=true
+  else
+    untrack=false
+  fi
+
+  if [[ "$stage" != ""||"$untrack" = true ]]; then
+    git_dirty='*'
+  else
+    git_dirty=''
+  fi
+}
+PROMPT_COMMAND="find_git_dirty_commit;find_git_dirty_stage; $PROMPT_COMMAND"
+---------------------------------------------------------------------------
+
+2.创建文件.git-prefix.sh，在里面写入一下内容（路径可自行修改，但为了和后面吻合建议用~/作为路径）
+---------------------------------------------------------------------------
+#判断当前是否在repo文件夹，如果是则修改shell开头
+
+find_git_fCol(){
+	isIn=$(git rev-parse --is-inside-work-tree  2> /dev/null)
+	local gitUsername=$(git config user.name  2> /dev/null)
+  	local gitPath=$(git rev-parse --show-toplevel  2> /dev/null)
+  	local gitRepo="${gitPath##*/}"
+  	local fCol
+	if [[ "$isIn" != "" ]]; then
+	  #statements
+	  fCol="$gitUsername@$gitRepo"
+	  echo $fCol
+	else
+	  fCol="$USER@$(hostname)"
+	  echo $fCol
+	fi
+}
+---------------------------------------------------------------------------
+
+3.调用git自带的查找branch的程序
+	3.1）在系统/etc/bash_completion.d/git-prompt找到文件，打开后复制内容
+	3.2）到达~/的目录，创建文件.git-prompt.sh把之前复制的内容粘贴进去然后保存
+
+4.在.bashrc文件中调用前面写好的程序，设置显示的shell开头。
+
+---------------------------------------------------------------------------
+#此处省略前面内容....
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
+#从这里开始有所变动---------
+
+#新增加内容，主要用于索引文件，路径根据您创建的文件位置而变化××××××××××××××××××××××××××
+
+#for finding git branch name
+source ~/.git-prompt.sh
+
+# for finding dirty condition
+source ~/.git-modi-prompt.sh
+
+# for changing prompt
+source ~/.git-prefix.sh
+
+# for git auto completion
+source /usr/share/bash-completion/completions/git
+
+#×××××××××××××××××××××××××××××××××××××××××××××××××
+
+#修改的内容，可以直接把PS1的内容复制粘贴即可，如果希望其他颜色请自行修改×××××××××××××××××××××××××××
+
+if [ "$color_prompt" = yes ]; then
+    PS1="${debian_chroot:+($debian_chroot)}\[\033[01;32m\]"'$(find_git_fCol)'"\[\033[01;33m\]"'$(__git_ps1 "(\[\033[01;36m\]%s\[\033[00m\]$git_dirty$git_not_commit\[\033[01;33m\])")'"\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
+else
+    PS1="${debian_chroot:+($debian_chroot)}"'$(find_git_fCol)'""'$(__git_ps1 "(%s$git_dirty$git_not_commit)")'":\w\$ "
+fi
+unset color_prompt force_color_prompt
+#××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××
+
+至此修改任务就完成了，效果图见“git_env_setup.png”
