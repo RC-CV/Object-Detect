@@ -5,7 +5,7 @@
 * 识别的内容:**位置**以及**颜色**
 * 识别的对象:**绣球**以及**圆环**
 
-**本周任务：细读siamFC论文，看完udacity的git和github以及Linux命令**
+**本周任务：继续完成上周任务并部署（配置环境和运行）**
  * 1.细读siamFC论文
    * [_主页_](http://www.robots.ox.ac.uk/~luca/siamese-fc.html) 
    * [_论文_](https://arxiv.org/pdf/1606.09549.pdf) 
