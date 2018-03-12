@@ -1,47 +1,39 @@
 # Robocon 物体跟踪与识别
 **Robocon 视觉组的库**
 <br>
-本次比赛的任务内容在于使用计算机视觉的图像识别，目标跟踪。
+本次比赛的任务内容在于使用计算机视觉的目标跟踪,目标是跟踪小球的坐标轨迹，判断球是否进环，如不进，算出偏差，传输参数以调整自动机器人角度方向。
 * 识别的内容:**位置**以及**颜色**
 * 识别的对象:**绣球**以及**圆环**
 
-**本周任务：继续完成上周任务并部署（配置环境和运行）**
- * 1.细读siamFC论文
-   * [_主页_](http://www.robots.ox.ac.uk/~luca/siamese-fc.html) 
-   * [_论文_](https://arxiv.org/pdf/1606.09549.pdf) 
-   * [_源代码_](https://github.com/bertinetto/siamese-fc) 
-   * [_介绍视频_](https://www.youtube.com/watch?v=jZoUalMMZ_0) 
- * 2.看完Linux/git/github学习（Udacity中有课程）
- * 3.补充资料（公开课，浙江大学王蒙蒙关于目标跟踪的介绍）
-   * [_公开课视频_](http://cvmart.net/community/article/detail/40)
-   * [_知乎专栏_](https://zhuanlan.zhihu.com/visual-tracking)
-   * [_推荐的入门论文1_](https://pdfs.semanticscholar.org/59e5/b451055963f5e2b16e10958f806edf2b196f.pdf)
-   * [_推荐的入门论文2_](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Nam_Learning_Multi-Domain_Convolutional_CVPR_2016_paper.pdf)
-
-
+**本周任务：（在linux环境配置opencv和熟悉opencv,继续学习Python，查找相关跟踪算法）**
+ * 1.配置opencv
+   * [ubuntu16.04系统配置opencv](https://www.pyimagesearch.com/2016/10/24/ubuntu-16-04-how-to-install-opencv/) 
+   
+ * 2.学习opencv
+   * [opencv官网教程](https://docs.opencv.org/master/d9/df8/tutorial_root.html) 
+   
+ * 3.查找相关跟踪算法
+   * [类似demo学习](https://www.pyimagesearch.com/2015/09/14/ball-tracking-with-opencv/)
+   * [实战教程](https://www.pyimagesearch.com/)
+   
 
 **目录**
  * [_1.流程及要求_](#1流程及要求)
  * [_2.所需相关应用_](#2所需相关应用)
  * [_3.安装包_](#3安装包)
  * [_4.相关文献资料_](#4相关文献资料)
-## 1.流程及要求
-#### 1.搜集数据
- * 需要大量的**绣球**以及**圆环**的图片数据
-#### 2.数据预处理
- * 利用**opencv**对数据进行预处理
- * 尽量**减少**深度学习模型学习**负担**
- * **保留**图片的拍摄**顺序**
-#### 3.模型搭建
- * 避免过大**计算量**造成**内存**耗尽
- * 阅读最新**论文**文献，参考已有的**框架**
-#### 4.训练模型
- * 可能会用到云计算（阿里云/腾讯云/floyd/AWS...）
-#### 5.测试与评估模型效果
- * **实时**出结果
- * 检测的**精准度高**
-#### 6.投放模型与调试
- * 与电控组合作调试
+## 1.流程及要求 
+#### 1.实现小球跟踪
+ * 利用opencv+python,调用摄像头，参照其他代码完成本任务（检验标准：算法+效果）。
+#### 2.编写参数输出代码
+ * 需要和电控组合作沟通 
+#### 3.部署至工控机
+ * 这步容易完成，只需重走一遍自己电脑的配置流程。
+#### 4.投放模型与调试
+ * 把工控机投放机器人上，与电控组合作调试
+ 
+ 
+ --------以下资料未改动------------- 
 ## 2.所需相关应用
  *  **关键软件**
 	 * [**Anaconda**](https://www.anaconda.com/download/)  : 主要用于管理安装包
