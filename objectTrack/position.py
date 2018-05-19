@@ -34,7 +34,7 @@ def main():
 	
 	
 	#calculate f
-	distance=calDistance(700,340)
+	distance=calDistance(700,240)
 	f=fCalculate(distance,40,r)
 	for i in points:
 		
