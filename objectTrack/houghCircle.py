@@ -1,8 +1,7 @@
 import numpy as np
 import cv2
 
-def detectCircle(imagePath):
-	image = cv2.imread(imagePath)
+def detectCircle(image):
 	output = image.copy()
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	img = cv2.medianBlur(gray, 3)
