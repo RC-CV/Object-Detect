@@ -3,6 +3,7 @@ import numpy as np
 import houghCircle
 import cutImage
 import ballDetect
+import angle
 
 def calDistance(height,length):
 	return (height**2+length**2)**0.5
@@ -15,7 +16,7 @@ def calZ(f,radius,pixRadius):
 
 
 def main():
-	videoPath='jin4.avi'
+	videoPath='jin1.avi'
 	camera = cv2.VideoCapture(videoPath)
 	res,image=camera.read()
 	res,image=camera.read()
