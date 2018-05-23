@@ -48,6 +48,7 @@ def detect_video(video):
         cv2.imshow("back", dilated)
         if cv2.waitKey(110) & 0xff == 27:
             break
+           
     camera.release()
     return points
 

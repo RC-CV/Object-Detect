@@ -5,6 +5,7 @@ import cutImage
 import ballDetect
 import angle
 import math
+import line
 
 def calDistance(height,length):
 	return (height**2+length**2)**0.5
@@ -45,13 +46,17 @@ def main():
 
 	#calculate ring distance
 	distance=calDistance(disHor,disVer)
-	
+
+
 	#calculate f
 	f=fCalculate(distance,ringActual,r)
 	for (i,j) in zip(points,pointPos):
 		
 		#calculate distance
-		pixRadius=max(abs(i))/2
+		if(j[1]>y):
+			pixRadius=abs(i[0])/2
+		else:
+			pixRadius=max(abs(i))/2
 		#print(i)
 		print("pixRadius:",pixRadius)
 		#calculate distance
@@ -68,7 +73,7 @@ def main():
 	coordinate=[]
 	resolution=np.array([image.shape[1],image.shape[0]])#640,480
 	rate=r/ringActual
-	cameraAngle=math.pi/3# 60degree
+	cameraAngle=math.pi/6# 30degree
 
 	for p in pointPos:
 		#Calculate angels
@@ -76,7 +81,15 @@ def main():
 		#Calcualte coordinate
 		point=angle.calRectCoordin(xAngle,yAngle,p[2])
 		coordinate.append(point)
+	#line.drawGraph(coordinate)
 	print(np.array(coordinate))
+	coordinate=np.round(np.array(coordinate),decimals=2)
+	print('\n',coordinate.tolist())
+	line.drawGraph(coordinate.tolist())
+
+	xAngle,yAngle = angle.calAngle(cameraAngle,(x,y),resolution,rate,distance)
+	ringXYZ = angle.calRectCoordin(xAngle,yAngle,distance)
+	print("Ring X,Y,Z",ringXYZ)
 
 
 if __name__ == '__main__':
