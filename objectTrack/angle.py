@@ -28,9 +28,34 @@ def calAngle(cameraAngle,pointPos,resolution,rate,distance):
 	'''
 	return xAngle,yAngle
 
-def calRectCoordin(xAngle,yAngle,distance):
+def calRectCoordin(xAngle,yAngle,distance,camHight):
 	x=distance*math.cos(yAngle)*math.sin(xAngle)
 	y=distance*math.cos(yAngle)*math.cos(xAngle)
-	z=distance*math.sin(yAngle)
+	z=distance*math.sin(yAngle)+camHight
 
 	return [x,y,z]
+
+def calCamerAngle(pointPos,resolution,rate,distance,disVer,camHight):
+	'''
+	Argument:
+	pointPos	---像素坐标(x,y)
+	resolution	---分辨率(x,y) np.array
+	rate		---比率：像素/实际
+	distance	---直线实际距离
+	disHor		---水平实际距离
+	'''
+	#Extract info
+	_,y=pointPos
+	_,yMid=resolution/2
+	d=distance*rate
+
+	yMinus=yMid-y
+
+	#calculate yAngle
+	yAngle = math.asin((disVer-camHight)/distance)
+	cameraAngle=yAngle-math.asin(yMinus/d)
+
+	'''
+	cameraAngle ---弧度
+	'''
+	return cameraAngle

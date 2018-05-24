@@ -1,13 +1,24 @@
 import numpy as np
 import cv2
 
-def detectCircle(image):
+def detectCircle(image,disHor):
 	output = image.copy()
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	img = cv2.medianBlur(gray, 3)
 
-	circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 100,
-	                                   param1=50, param2=30, minRadius=40, maxRadius=60)
+	if(disHor>=500):
+		minR=40
+		maxR=80
+	else:
+		minR=60
+		maxR=120
+	if(image.shape[0]>700):
+		cirDis=800
+	else:
+		cirDis=400
+
+	circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, cirDis,
+	                                   param1=50, param2=30, minRadius=minR, maxRadius=maxR)
 	if circles is not None:
 		# convert the (x, y) coordinates and radius of the circles to integers
 		circles = np.round(circles[0, :]).astype("int")
