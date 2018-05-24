@@ -18,7 +18,12 @@ def calZ(f,radius,pixRadius):
 
 
 def main():
-	videoPath='jin1.avi'
+	disHor=700
+	disVer=240
+	ringActual=40
+	cameraAngle=(1/8)*math.pi
+
+	videoPath='jin4.avi'
 	camera = cv2.VideoCapture(videoPath)
 	res,image=camera.read()
 	res,image=camera.read()
@@ -40,9 +45,7 @@ def main():
 	points=points[:,2:4]
 	
 	
-	disHor=700
-	disVer=240
-	ringActual=40
+	
 
 	#calculate ring distance
 	distance=calDistance(disHor,disVer)
@@ -53,14 +56,17 @@ def main():
 	for (i,j) in zip(points,pointPos):
 		
 		#calculate distance
+		'''
 		if(j[1]>y):
 			pixRadius=abs(i[0])/2
 		else:
 			pixRadius=max(abs(i))/2
+		'''
+		pixRadius=abs(i[0])/2
 		#print(i)
 		print("pixRadius:",pixRadius)
 		#calculate distance
-		z=calZ(f,6,pixRadius)
+		z=calZ(f,8,pixRadius)
 		print("Ball distance:",z/100,"m")
 		
 		#position ---float (x,y,Z),Z-->(cm)
@@ -73,7 +79,10 @@ def main():
 	coordinate=[]
 	resolution=np.array([image.shape[1],image.shape[0]])#640,480
 	rate=r/ringActual
-	cameraAngle=math.pi/6# 30degree
+
+	xAngle,yAngle = angle.calAngle(cameraAngle,(x,y),resolution,rate,distance)
+	ringXYZ = angle.calRectCoordin(xAngle,yAngle,distance)
+	print("Ring X,Y,Z",ringXYZ)
 
 	for p in pointPos:
 		#Calculate angels
@@ -87,9 +96,7 @@ def main():
 	print('\n',coordinate.tolist())
 	line.drawGraph(coordinate.tolist())
 
-	xAngle,yAngle = angle.calAngle(cameraAngle,(x,y),resolution,rate,distance)
-	ringXYZ = angle.calRectCoordin(xAngle,yAngle,distance)
-	print("Ring X,Y,Z",ringXYZ)
+	
 
 
 if __name__ == '__main__':

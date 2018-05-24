@@ -20,8 +20,8 @@ def detectCircle(image):
 			cv2.circle(output, (x, y), 2, (0, 128, 255), -1)
 	 
 		# show the output image
-		#cv2.imshow("output", output)
-		#cv2.waitKey(0)
+		cv2.imshow("output", output)
+		cv2.waitKey(0)
 	else:
 		print("Circle not found!")
 

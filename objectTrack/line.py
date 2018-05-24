@@ -61,7 +61,7 @@ def drawGraph(point):
     # 绘制回归线
     x1 = np.linspace(0,9)
     x2 = np.linspace(0,12)
-    y = a0+x1*x1+x2*x2
+    y = (a0+x1*x1+x2)
     ax.plot(x1,x2,y)
     show_line = "y="+str(a0)+"+"+str(a1)+"x1"+"+"+str(a2)+"x2"
     plt.title(show_line)

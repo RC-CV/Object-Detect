@@ -37,11 +37,12 @@ def detect_video(video):
             
             # 计算矩形框的面积
             area = cv2.contourArea(c)
-            print("Ball capture",area,w,h)
+            #print("Ball capture",area,w,h)
 
             if 100 < area < 2000:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 points.append([x,y,w,h])
+                print("Ball capture",area,w,h)
                 #print(area)
 
         cv2.imshow("detection", frame)
