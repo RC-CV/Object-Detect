@@ -2,7 +2,7 @@
 import cv2
 import houghCircle
 
-def detect_video(video):
+def detect_video(video,ringPoint):
     camera = cv2.VideoCapture(video)
     history = 20    # 训练帧数
 
@@ -17,13 +17,9 @@ def detect_video(video):
 
     frames = 0
     points = []
+    ring_x , ring_y , ring_r=ringPoint
     while True:
         res, frame = camera.read()
-        # 引入霍夫变换检测圆环,利用圆心半径来判断小球是否已经完全下降(只取第一帧)
-        if frames == 0 :
-            ring_x , ring_y , ring_r  = houghCircle.detectCircle(frame,600) #第二个参数是距离环的距离
-            print([ring_x ,ring_y , ring_r])
-
         frame = cv2.GaussianBlur(frame, (21, 21), 0)
         if not res:
             # 若读取失败则跳出循环
@@ -68,10 +64,11 @@ def detect_video(video):
                     ball_x = x
                     ball_y = y
                     print("First ball get",[ball_x ,ball_y])
+                    points.append([x,y,w,h])
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 else:
-                    # 640的，用ball_x !=0 and (ball_x - (img_width*0.15)) < x < (ball_x+(img_width*0.15)) and ( y < (ball_y+img_height*0.5))
-                    # 320的，用ball_x !=0 and (ball_x - (img_width*0.15)) < x < (ball_x+(img_width*0.15)) and ( y < (ball_y+img_height*0.35))
+                    # 640的，用 ball_x !=0 and (ball_x - (img_width*0.15)) < x < (ball_x+(img_width*0.15)) and ( y < (ball_y+img_height*0.5))
+                    # 320的，用 ball_x !=0 and (ball_x - (img_width*0.15)) < x < (ball_x+(img_width*0.15)) and ( y < (ball_y+img_height*0.35))
                     if ball_x !=0 and (ball_x - (img_width*0.15)) < x < (ball_x+(img_width*0.15)) and ( y < (ball_y+img_height*0.35)):
                         if  (y ) > (ring_y + ring_r) or (y + 10) > (ring_y + ring_r) or (y+h+5) > img_height:
                             # 小球结束,小球走到了环的下面
@@ -86,6 +83,7 @@ def detect_video(video):
                             ball_y = y
                             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                             print("Next ball",[ball_x ,ball_y])
+                            points.append([x,y,w,h])
                             break
 
                     elif ball_x==0 and ball_y ==0  :
