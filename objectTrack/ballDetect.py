@@ -41,6 +41,8 @@ def detect_video(video):
             print("shock , no ball")
             continue
         for c in contours:
+            if cv2.waitKey(-1) & 0xff != 32:
+                break
             # 获取矩形框边界坐标
             x, y, w, h = cv2.boundingRect(c)
             # print([x,y,w,h])

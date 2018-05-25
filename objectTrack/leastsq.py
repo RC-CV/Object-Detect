@@ -9,12 +9,17 @@ from mpl_toolkits.mplot3d import Axes3D
 
 # create function
 '''
-z=v*sin(b)*t-0.5*10*t^2   vz,v
-y=v*sin(a)*cos(b)*t + b   vy
-x=v*cos(a)*cos(b)*t + c   vx
+z=v*sin(q)*t-0.5*10*t^2   vz,v
+y=v*sin(a)*cos(q)*t + b   vy
+x=v*cos(a)*cos(q)*t + c   vx
 '''
 def curve_function(p,x,y,z):
     v,vx,vy,vz,b,c,d=p
+    '''
+    vx=v*cos(a)*cos(q)
+    vy=v*sin(a)*cos(q)
+    vz=v*sin(q)
+	'''
     ty=(y-b)/(vy)
     tx=(x-c)/(vx)
 
@@ -23,7 +28,7 @@ def curve_function(p,x,y,z):
     remain+=(vz*tx-5*(tx**2)+d-z)**2
     remain+=(vy*tx+b-y)**2
     remain+=(vx*ty+c-x)**2
-    remain+=(v**2-vx**2+vz**2+vy**2)
+    remain+=(v**2-(vx**2+(vz-5*(ty+tx)/2)**2+vy**2))
 
     return remain
 def error(p,x,y,z,r):
@@ -53,16 +58,24 @@ def draw3DLine(points):
 	else:
 		p0=[100,10,100,100,136,-30,100]
 
-	result=leastsq(error,p0,args=(Xi,Yi,Zi,Ri),maxfev=2000)
+	result=leastsq(error,p0,args=(Xi,Yi,Zi,Ri),maxfev=3000)
 	v,vx,vy,vz,b,c,d=result[0]
-	print(v,vx,vy,vz,b,c,d)
+	print("v={:.2f} vx={:.2f} vy={:.2f} vz={:.2f} b={:.2f} c={:.2f} d={:.2f} ".format(v,vx,vy,vz,b,c,d));
+	print("z={:.2f}*t-5*t^2+{:.2f} y={:.2f}*t+{:.2f} x={:.2f}*t+{:.2f} v={:.2f}".format(vz,d,vy,b,vx,c,v));
+	#print("values:",v,vx,vy,vz,b,c,d)
 	# show result
 	ax.scatter(Xi,Yi,Zi,color="blue",label="Data Points",linewidth=2)
 	x=[]
 	y=[]
 	z=[]
-	for item in range(200):
-		t=item/20
+
+	startItm=(Yi[0]-b)/vy
+	endItm=(Yi[-1]-b)/vy
+	#print(Yi[0],Yi[-1],startItm,endItm)
+	rangeItm=abs(endItm-startItm)*1.5
+	iterNum=200
+	for item in range(iterNum):
+		t=item*(rangeItm/iterNum)+startItm
 		z.append(vz*t-5*(t**2)+d)
 		y.append(vy*t+b)
 		x.append(vx*t+c)

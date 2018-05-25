@@ -28,14 +28,14 @@ def main():
 	cameraHight		--摄像机高度
 	ballR			--球的实际半径
 	'''
-	disHor=400
+	disHor=800
 	disVer=240
 	ringActual=40
 	cameraHight=20
 	ballR=10
 
 
-	videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/single_eye_data_1280/6mFirst/In2.avi'
+	videoPath='/mnt/hgfs/Virtural Share doc/data/7m/In3.avi'
 	#videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/single_eye_640/4m/In3.avi'
 	camera = cv2.VideoCapture(videoPath)
 	res,image=camera.read()
@@ -83,16 +83,18 @@ def main():
 		print("Ball distance:",z/100,"m")
 		
 		#position ---float (x,y,Z),Z-->(cm)
-		#store distance，记录球的
+		#store distance，记录球的坐标（像素）与距离（实际）
 		j[2]=z
 		j[0]+=pixRadius
 		j[1]+=(i[1]-pixRadius)
 	
 	
 
-	#store rectangel coordinate
+	#store rectangel coordinate，创建数组记录球的三维直角坐标（真实）
 	coordinate=[]
+	#get resolution,获取图片分辨率
 	resolution=np.array([image.shape[1],image.shape[0]])#640,480
+
 	rate=r/ringActual
 
 	cameraAngle=angle.calCamerAngle((x,y),resolution,rate,distance,disVer,cameraHight)
