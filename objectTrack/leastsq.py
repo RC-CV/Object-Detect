@@ -80,8 +80,19 @@ def draw3DLine(points):
 		y.append(vy*t+b)
 		x.append(vx*t+c)
 	#print(x,y,z)
-	ax.scatter(x,y,z,color="red",label="Data Points",linewidth=2)
+	#ax.scatter(x,y,z,color="red",label="Data Points",linewidth=2)
 	'''
 	ax.plot(x,y,z,color="red",label="Fitting Result",linewidth=2)
 	'''
+	ax.plot(x, y, z, label='Fitting curve',color="red")
+	ax.legend()
 	plt.show()
+	return (vx,vy,vz,b,c,d)
+
+def predictBallPos(disHor,p):
+	(vx,vy,vz,b,c,d)=p
+	t=(disHor-b)/vy
+	z=vz*t-5*(t**2)+d
+	x=vx*t+c
+	return x,z
+

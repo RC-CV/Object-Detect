@@ -29,13 +29,19 @@ def main():
 	ballR			--球的实际半径
 	'''
 	disHor=800
-	disVer=240
+	disVer=200
+	robotR=20
 	ringActual=40
 	cameraHight=20
-	ballR=10
+	ballR=11
+	
+
+	disHor-=robotR
+	disVer+=ringActual
+	
 
 
-	videoPath='/mnt/hgfs/Virtural Share doc/data/7m/In3.avi'
+	videoPath='/mnt/hgfs/Virtural Share doc/data/7m/In2.avi'
 	#videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/single_eye_640/4m/In3.avi'
 	camera = cv2.VideoCapture(videoPath)
 	res,image=camera.read()
@@ -55,7 +61,8 @@ def main():
 	points=np.array(ballDetect.detect_video(videoPath))
 	
 	#如果检测出来的球个数少于7个，则无法进行曲线拟合，跳出循环
-	if(points.size<7):
+	print('points number:',len(points))
+	if(len(points)<7):
 		print("Detected Ball not enough, Exit System")
 		return
 
@@ -112,8 +119,10 @@ def main():
 	coordinate=np.round(np.array(coordinate),decimals=2)
 	print('\n',coordinate.tolist())
 	line.drawGraph(coordinate.tolist())
-	leastsq.draw3DLine(coordinate)
-	
+	bp=leastsq.draw3DLine(coordinate)
+	bx,bz=leastsq.predictBallPos(disHor,bp)
+	print("Ball position around ring\n (x,y,z)=({:.2f},{:.2f},{:.2f})".format(bx,disHor,bz))
+	print("Ring position:\n (x,y,z)=({:.2f},{:.2f},{:.2f})".format(ringXYZ[0],ringXYZ[1],ringXYZ[2]))
 
 
 if __name__ == '__main__':
