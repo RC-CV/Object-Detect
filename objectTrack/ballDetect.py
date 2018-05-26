@@ -40,17 +40,17 @@ def detect_video(video,ringPoint):
         image, contours, hier = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         # print(len(contours))
         if(len(contours) > 4):
-            print("shock , no ball")
+            #print("shock , no ball")
             continue
 
         for c in contours:
             # print(c)
             # 获取矩形框边界坐标
             x, y, w, h = cv2.boundingRect(c)
-            print([x,y,w,h])
+            #print([x,y,w,h])
             # 计算矩形框的面积
             area = cv2.contourArea(c)
-            print(area)
+           #print(area)
             # 如果是640，7mi则用200<area <2500(比赛不用7米，是6米)
             # 如果是1280，2m高，6m远 ,area用600~8000(放弃这种参数)
             # 如果是640的，2m高，6m远 ,area用600~8000

@@ -61,7 +61,7 @@ def draw3DLine(points):
 	else:
 		p0=[100,10,100,100,136,-30,100]
 
-	result=leastsq(error,p0,args=(Xi,Yi,Zi,Ri),maxfev=3000)
+	result=leastsq(error,p0,args=(Xi,Yi,Zi,Ri))
 	v,vx,vy,vz,b,c,d=result[0]
 	print("v={:.2f} vx={:.2f} vy={:.2f} vz={:.2f} b={:.2f} c={:.2f} d={:.2f} ".format(v,vx,vy,vz,b,c,d));
 	print("z={:.2f}*t-5*t^2+{:.2f} y={:.2f}*t+{:.2f} x={:.2f}*t+{:.2f} v={:.2f}".format(vz,d,vy,b,vx,c,v));

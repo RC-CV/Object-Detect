@@ -139,7 +139,7 @@ def main(videoPath,expect):
 	#line.drawGraph(coordinate)
 	#print(np.array(coordinate))
 	coordinate=np.round(np.array(coordinate),decimals=2)
-	#print('\n',coordinate.tolist())
+	print('\n',coordinate.tolist())
 	if(max(coordinate[1])<disHor/3):
 		return decide(0,expect)
 
@@ -147,8 +147,8 @@ def main(videoPath,expect):
 	line.drawGraph(coordinate.tolist())
 	bp=leastsq.draw3DLine(coordinate)
 	bx,bz=leastsq.predictBallPos(disHor,bp)
-	#print("Ball position around ring\n (x,y,z)=({:.2f},{:.2f},{:.2f})".format(bx,disHor,bz))
-	#print("Ring position:\n (x,y,z)=({:.2f},{:.2f},{:.2f})".format(ringXYZ[0],ringXYZ[1],ringXYZ[2]))
+	print("Ball position around ring\n (x,y,z)=({:.2f},{:.2f},{:.2f})".format(bx,disHor,bz))
+	print("Ring position:\n (x,y,z)=({:.2f},{:.2f},{:.2f})".format(ringXYZ[0],ringXYZ[1],ringXYZ[2]))
 
 	if(disVer-ringActual-10<bz<disVer+ringActual+10):
 		result=1
@@ -169,19 +169,19 @@ if __name__ == '__main__':
 	successIn=0
 	fail=0
 	for i in range(1,6):
-		videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftIn'+str(i)+'.avi'
-		success+=main(videoPath,1)
+		#videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftIn'+str(i)+'.avi'
+		#success+=main(videoPath,1)
 		videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/RightIn'+str(i)+'.avi'
 		success+=main(videoPath,1)
 	successIn=success
 	fail=success
 	for i in range(1,13):
-		videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftNotIn'+str(i)+'.avi'
-		success+=main(videoPath,0)
+		#videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftNotIn'+str(i)+'.avi'
+		#success+=main(videoPath,0)
 		videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/RightNotIn'+str(i)+'.avi'
 		success+=main(videoPath,0)
 	fail=success-fail
 
-	print('Total Accuracy:{:.2f}'.format(100*success/(10.0+12.0*2)))
-	print('Detect In Accuracy:{:.2f}'.format(100*successIn/(10.0)))
-	print('Detect out Accuracy:{:.2f}'.format(100*fail/(12.0*2)))
+	print('Total Accuracy:{:.2f}'.format(100*success/(5.0+12.0)))
+	print('Detect In Accuracy:{:.2f}'.format(100*successIn/(5.0)))
+	print('Detect out Accuracy:{:.2f}'.format(100*fail/(12.0)))
