@@ -21,4 +21,4 @@ def drawGraph(point):
         show_point = "No."+str(i)
         ax.text(x1i,x2i,yi,show_point)
     
-    plt.show()
+    #plt.show()

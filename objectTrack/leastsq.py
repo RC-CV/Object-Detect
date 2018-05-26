@@ -28,7 +28,7 @@ def curve_function(p,x,y,z):
     remain+=(vz*tx-5*(tx**2)+d-z)**2
     remain+=(vy*tx+b-y)**2
     remain+=(vx*ty+c-x)**2
-    remain+=(v**2-(vx**2+(vz-5*(ty+tx)/2)**2+vy**2))
+    remain+=(v**2-(vx**2+(vz)**2+vy**2))
 
     return remain
 def error(p,x,y,z,r):
@@ -42,6 +42,9 @@ def draw3DLine(points):
 
 	# obtain data
 	#points=np.array(points)
+	points2=points.copy()
+	if(len(points2)<7):
+		points=np.vstack((points,points2))
 
 
 	Xi=np.array(points[:,0:1]).flatten()
@@ -86,7 +89,7 @@ def draw3DLine(points):
 	'''
 	ax.plot(x, y, z, label='Fitting curve',color="red")
 	ax.legend()
-	plt.show()
+	#plt.show()
 	return (vx,vy,vz,b,c,d)
 
 def predictBallPos(disHor,p):
@@ -96,3 +99,13 @@ def predictBallPos(disHor,p):
 	x=vx*t+c
 	return x,z
 
+def pointDistance(points,p):
+	(vx,vy,vz,b,c,d)=p
+	result=[]
+	for point in points2:
+		t=(point[1]-b)/vy
+		z=vz*t-5*(t**2)+d
+		x=vx*t+c
+		distance = ((x-point[0])**2+0+(z-point[2])**2)**0.5
+		result.append(distance)
+	return distance

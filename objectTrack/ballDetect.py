@@ -97,8 +97,8 @@ def detect_video(video,ringPoint):
                         ball_y += (img_height*0.1)
                         break
 
-        cv2.imshow("detection", frame)
-        cv2.imshow("back", dilated)
+        #cv2.imshow("detection", frame)
+        #cv2.imshow("back", dilated)
         k = cv2.waitKey(110) & 0xff
         if k == 27:
             break

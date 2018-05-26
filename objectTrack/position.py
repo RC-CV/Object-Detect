@@ -7,6 +7,7 @@ import angle
 import math
 import line
 import leastsq
+import cluster
 
 def lengthRecal(rate,disHor,xPixel):
 	'''
@@ -33,7 +34,7 @@ def calZ(f,radius,pixRadius):
 	return f*radius/pixRadius
 
 
-def main():
+def main(videoPath,expect):
 	'''
 	Argument:
 	disHor			--圆环中心距离机器人水平距离
@@ -47,7 +48,7 @@ def main():
 	robotR=20
 	ringActual=40
 	cameraHight=20
-	ballR=11
+	ballR=16
 	
 
 	disHor-=robotR
@@ -55,8 +56,7 @@ def main():
 	
 
 
-	#videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftIn3.avi'
-	videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/single_eye_640/6m/In4.avi'
+	
 	camera = cv2.VideoCapture(videoPath)
 	res,image=camera.read()
 	res,image=camera.read()
@@ -73,12 +73,15 @@ def main():
 	
 	#Crop ball,x,y,w,h，利用前景提取获得球的位置与范围（在照片中）
 	points=np.array(ballDetect.detect_video(videoPath,(x,y,r)))
+	if(len(points)>7):
+		points=cluster.clustering(points)
 	
 	#如果检测出来的球个数少于7个，则无法进行曲线拟合，跳出循环
 	print('points number:',len(points))
-	if(len(points)<7):
+	if(len(points)<4):
 		print("Detected Ball not enough, Exit System")
-		return
+		return decide(0,expect)
+
 
 	#coordinate in image，创建记录球实际坐标的数组
 	pointPos=np.array(points[:,0:3],dtype='float64',copy=True)
@@ -90,7 +93,7 @@ def main():
 	#calculate ring distance，计算环的实际距离
 	length=lengthRecal(ringActual/r,disHor,x-image.shape[1]/2)
 	distance=calDistance(disVer-cameraHight,length)
-	print("Distance",distance)
+	#print("Distance",distance)
 
 	
 	#calculate f，计算焦距
@@ -100,10 +103,10 @@ def main():
 		#calculate distance，计算球半径（像素）
 		pixRadius=abs(i[0])/2
 		#print(i)
-		print("pixRadius:",pixRadius)
+		#print("pixRadius:",pixRadius)
 		#calculate distance，计算球距离（实际）
 		z=calZ(f,ballR,pixRadius)
-		print("Ball distance:",z/100,"m")
+		#print("Ball distance:",z/100,"m")
 		
 		#position ---float (x,y,Z),Z-->(cm)
 		#store distance，记录球的坐标（像素）与距离（实际）
@@ -112,6 +115,7 @@ def main():
 		j[1]+=(i[1]-pixRadius)
 	
 	
+
 
 	#store rectangel coordinate，创建数组记录球的三维直角坐标（真实）
 	coordinate=[]
@@ -124,7 +128,7 @@ def main():
 
 	xAngle,yAngle = angle.calAngle(cameraAngle,(x,y),resolution,rate,distance)
 	ringXYZ = angle.calRectCoordin(xAngle,yAngle,distance,cameraHight)
-	print("Ring X,Y,Z",ringXYZ,"camera angle",cameraAngle)
+	#print("Ring X,Y,Z",ringXYZ,"camera angle",cameraAngle)
 
 	for p in pointPos:
 		#Calculate angels
@@ -133,15 +137,51 @@ def main():
 		point=angle.calRectCoordin(xAngle,yAngle,p[2],cameraHight)
 		coordinate.append(point)
 	#line.drawGraph(coordinate)
-	print(np.array(coordinate))
+	#print(np.array(coordinate))
 	coordinate=np.round(np.array(coordinate),decimals=2)
-	print('\n',coordinate.tolist())
+	#print('\n',coordinate.tolist())
+	if(max(coordinate[1])<disHor/3):
+		return decide(0,expect)
+
+
 	line.drawGraph(coordinate.tolist())
 	bp=leastsq.draw3DLine(coordinate)
 	bx,bz=leastsq.predictBallPos(disHor,bp)
-	print("Ball position around ring\n (x,y,z)=({:.2f},{:.2f},{:.2f})".format(bx,disHor,bz))
-	print("Ring position:\n (x,y,z)=({:.2f},{:.2f},{:.2f})".format(ringXYZ[0],ringXYZ[1],ringXYZ[2]))
+	#print("Ball position around ring\n (x,y,z)=({:.2f},{:.2f},{:.2f})".format(bx,disHor,bz))
+	#print("Ring position:\n (x,y,z)=({:.2f},{:.2f},{:.2f})".format(ringXYZ[0],ringXYZ[1],ringXYZ[2]))
 
+	if(disVer-ringActual-10<bz<disVer+ringActual+10):
+		result=1
+	else:
+		result=0
+	return decide(result,expect)
+
+def decide(result,expect):
+	if(expect==result):
+		return 1
+	else:
+		return 0
 
 if __name__ == '__main__':
-	main()
+	
+	#videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/single_eye_640/6m/NotIn4.avi'
+	success=0
+	successIn=0
+	fail=0
+	for i in range(1,6):
+		videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftIn'+str(i)+'.avi'
+		success+=main(videoPath,1)
+		videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/RightIn'+str(i)+'.avi'
+		success+=main(videoPath,1)
+	successIn=success
+	fail=success
+	for i in range(1,13):
+		videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftNotIn'+str(i)+'.avi'
+		success+=main(videoPath,0)
+		videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/RightNotIn'+str(i)+'.avi'
+		success+=main(videoPath,0)
+	fail=success-fail
+
+	print('Total Accuracy:{:.2f}'.format(100*success/(10.0+12.0*2)))
+	print('Detect In Accuracy:{:.2f}'.format(100*successIn/(10.0)))
+	print('Detect out Accuracy:{:.2f}'.format(100*fail/(12.0*2)))
