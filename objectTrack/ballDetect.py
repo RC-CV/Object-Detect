@@ -2,7 +2,7 @@
 import cv2
 import houghCircle
 
-def detect_video(video,ringPoint):
+def detect_video(video,ringPoint,showIt):
     camera = cv2.VideoCapture(video)
     history = 20    # 训练帧数
 
@@ -96,9 +96,9 @@ def detect_video(video,ringPoint):
                         print("Scanner Moved!")
                         ball_y += (img_height*0.1)
                         break
-
-        #cv2.imshow("detection", frame)
-        #cv2.imshow("back", dilated)
+        if(showIt):
+            cv2.imshow("detection", frame)
+            cv2.imshow("back", dilated)
         k = cv2.waitKey(110) & 0xff
         if k == 27:
             break

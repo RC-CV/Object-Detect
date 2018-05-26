@@ -7,8 +7,8 @@ from  matplotlib import pyplot as plt2
 from mpl_toolkits.mplot3d import Axes3D
 import collections
 
-def clustering(points):
-	points2=points.copy()
+def clustering(points,showIt):
+	points2=points.copy()[:,:2]
 	points2=whiten(points2)
 	#1. 层次聚类
 	#生成点与点之间的距离矩阵,这里用的欧氏距离:
@@ -43,8 +43,8 @@ def clustering(points):
 	    #show_point = "No."+str(i)+" ["+ str(x1i) +","+ str(x2i)+","+str(yi) + "]"
 	    show_point = "No."+str(i)
 	    ax.text(x1i,x2i,yi,show_point)
-
-	#plt2.show()
+	if(showIt):
+		plt2.show()
 
 
 	d = collections.Counter(cluster)
@@ -60,8 +60,8 @@ def clustering(points):
 	print('index',index,'maxD',maxD)
 
 	newPoint=[]
-	for i,j in zip(cluster,points):
-		if(i==index):
-			newPoint.append(j)
+	for i in range(0,len(points)):
+		if(cluster[i]==index):
+			newPoint.append(points[i])
 
 	return np.array(newPoint)

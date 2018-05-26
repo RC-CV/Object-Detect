@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-def detectCircle(image,disHor):
+def detectCircle(image,disHor,showIt):
 	output = image.copy()
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	img = cv2.medianBlur(gray, 3)
@@ -42,8 +42,9 @@ def detectCircle(image,disHor):
 			cv2.circle(output, (x, y), 2, (0, 128, 255), -1)
 	 
 		# show the output image
-		#cv2.imshow("output", output)
-		#cv2.waitKey(0)
+		if(showIt):
+			cv2.imshow("output", output)
+			cv2.waitKey(0)
 	else:
 		print("Circle not found!")
 

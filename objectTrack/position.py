@@ -33,55 +33,17 @@ def fCalculate(distance,radius,pixRadius):
 def calZ(f,radius,pixRadius):
 	return f*radius/pixRadius
 
-
-def main(videoPath,expect):
-	'''
-	Argument:
-	disHor			--圆环中心距离机器人水平距离
-	disVer			--圆环中心距离机器人垂直距离
-	ringActual		--圆环实际半径大小
-	cameraHight		--摄像机高度
-	ballR			--球的实际半径
-	'''
-	disHor=600
-	disVer=200
-	robotR=20
-	ringActual=40
-	cameraHight=20
-	ballR=16
-	
-
-	disHor-=robotR
-	disVer+=ringActual
-	
-
-
-	
-	camera = cv2.VideoCapture(videoPath)
-	res,image=camera.read()
-	res,image=camera.read()
-	if not res:
-		print("Image not captured!")
-		return
-
-	camera.release()
-	
-	
+def imageToPoints(image,disHor,videoPath,showIt):
 	#Find circle，霍夫变换获取圆环位置
-
-	(x,y,r)=houghCircle.detectCircle(image,disHor)
+	(x,y,r)=houghCircle.detectCircle(image,disHor,showIt)
 	
 	#Crop ball,x,y,w,h，利用前景提取获得球的位置与范围（在照片中）
-	points=np.array(ballDetect.detect_video(videoPath,(x,y,r)))
-	if(len(points)>7):
-		points=cluster.clustering(points)
-	
-	#如果检测出来的球个数少于7个，则无法进行曲线拟合，跳出循环
-	print('points number:',len(points))
-	if(len(points)<4):
-		print("Detected Ball not enough, Exit System")
-		return decide(0,expect)
+	points=np.array(ballDetect.detect_video(videoPath,(x,y,r),showIt))
 
+	return x,y,r,points
+#计算三维坐标系
+def obtainCoordinate(image,disHor,disVer,ringActual,cameraHight,ballR,points,x,y,r):
+	
 
 	#coordinate in image，创建记录球实际坐标的数组
 	pointPos=np.array(points[:,0:3],dtype='float64',copy=True)
@@ -114,9 +76,6 @@ def main(videoPath,expect):
 		j[0]+=pixRadius
 		j[1]+=(i[1]-pixRadius)
 	
-	
-
-
 	#store rectangel coordinate，创建数组记录球的三维直角坐标（真实）
 	coordinate=[]
 	#get resolution,获取图片分辨率
@@ -136,16 +95,65 @@ def main(videoPath,expect):
 		#Calcualte coordinate
 		point=angle.calRectCoordin(xAngle,yAngle,p[2],cameraHight)
 		coordinate.append(point)
+
 	#line.drawGraph(coordinate)
 	#print(np.array(coordinate))
 	coordinate=np.round(np.array(coordinate),decimals=2)
 	print('\n',coordinate.tolist())
+	return coordinate,ringXYZ
+
+def main(videoPath,expect,showIt):
+	'''
+	Argument:
+	disHor			--圆环中心距离机器人水平距离
+	disVer			--圆环中心距离机器人垂直距离
+	ringActual		--圆环实际半径大小
+	cameraHight		--摄像机高度
+	ballR			--球的实际半径
+	'''
+	disHor=600
+	disVer=200
+	robotR=20
+	ringActual=40
+	cameraHight=20
+	ballR=17
+	
+
+	disHor-=robotR
+	disVer+=ringActual
+
+	#pathL,pathR=videoPath
+
+	camera = cv2.VideoCapture(videoPath)
+	res,image=camera.read()
+	res,image=camera.read()
+	if not res:
+		print("Image not captured!")
+		return
+
+	camera.release()
+	
+	x,y,r,points=imageToPoints(image,disHor,videoPath,showIt)
+
+	if(len(points)>7):
+		points=cluster.clustering(points,showIt)
+	
+	#如果检测出来的球个数少于7个，则无法进行曲线拟合，跳出循环
+	print('points number:',len(points))
+	if(len(points)<4):
+		print("Detected Ball not enough, Exit System")
+		return decide(0,expect)
+	
+	coordinate,ringXYZ=obtainCoordinate(image,disHor,disVer,ringActual,cameraHight,ballR,points,x,y,r)
+	
+
+
 	if(max(coordinate[1])<disHor/3):
 		return decide(0,expect)
 
 
-	line.drawGraph(coordinate.tolist())
-	bp=leastsq.draw3DLine(coordinate)
+	line.drawGraph(coordinate.tolist(),showIt)
+	bp=leastsq.draw3DLine(coordinate,showIt)
 	bx,bz=leastsq.predictBallPos(disHor,bp)
 	print("Ball position around ring\n (x,y,z)=({:.2f},{:.2f},{:.2f})".format(bx,disHor,bz))
 	print("Ring position:\n (x,y,z)=({:.2f},{:.2f},{:.2f})".format(ringXYZ[0],ringXYZ[1],ringXYZ[2]))
@@ -163,25 +171,40 @@ def decide(result,expect):
 		return 0
 
 if __name__ == '__main__':
-	
+	'''
+	videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftNotIn'+str(12)+'.avi'
+	result=main(videoPath,0,True)
+	print(result)
 	#videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/single_eye_640/6m/NotIn4.avi'
+'''
+	showIt=False
 	success=0
 	successIn=0
 	fail=0
+	InError=[]
+	outError=[]
 	for i in range(1,6):
-		#videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftIn'+str(i)+'.avi'
+		videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftIn'+str(i)+'.avi'
 		#success+=main(videoPath,1)
-		videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/RightIn'+str(i)+'.avi'
-		success+=main(videoPath,1)
+		#videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/RightIn'+str(i)+'.avi'
+		result=main(videoPath,1,showIt)
+		success+=result
+		if(result==0):
+			InError.append(i)
 	successIn=success
 	fail=success
 	for i in range(1,13):
-		#videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftNotIn'+str(i)+'.avi'
+		videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftNotIn'+str(i)+'.avi'
 		#success+=main(videoPath,0)
-		videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/RightNotIn'+str(i)+'.avi'
-		success+=main(videoPath,0)
+		#videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/RightNotIn'+str(i)+'.avi'
+		result=main(videoPath,0,showIt)
+		success+=result
+		if(result==0):
+			outError.append(i)
 	fail=success-fail
-
 	print('Total Accuracy:{:.2f}'.format(100*success/(5.0+12.0)))
 	print('Detect In Accuracy:{:.2f}'.format(100*successIn/(5.0)))
 	print('Detect out Accuracy:{:.2f}'.format(100*fail/(12.0)))
+	print('In Error video',InError,'Out Error video',outError)
+	
+

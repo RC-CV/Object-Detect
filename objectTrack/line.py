@@ -2,7 +2,7 @@ from  matplotlib import pyplot as plt
 import  numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
-def drawGraph(point):
+def drawGraph(point,showIt):
     fig = plt.figure()
     ax = Axes3D(fig)
 
@@ -20,5 +20,5 @@ def drawGraph(point):
         #show_point = "No."+str(i)+" ["+ str(x1i) +","+ str(x2i)+","+str(yi) + "]"
         show_point = "No."+str(i)
         ax.text(x1i,x2i,yi,show_point)
-    
-    #plt.show()
+    if(showIt):
+        plt.show()

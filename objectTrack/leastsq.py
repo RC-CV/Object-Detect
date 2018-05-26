@@ -34,7 +34,7 @@ def curve_function(p,x,y,z):
 def error(p,x,y,z,r):
     return curve_function(p,x,y,z)
 
-def draw3DLine(points):
+def draw3DLine(points,showIt):
 	fig = plt.figure()
 	ax = Axes3D(fig)
 	plt.xlabel("X")
@@ -89,7 +89,8 @@ def draw3DLine(points):
 	'''
 	ax.plot(x, y, z, label='Fitting curve',color="red")
 	ax.legend()
-	#plt.show()
+	if(showIt):
+		plt.show()
 	return (vx,vy,vz,b,c,d)
 
 def predictBallPos(disHor,p):
