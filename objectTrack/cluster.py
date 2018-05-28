@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import collections
 
 def clustering(points,showIt):
-	points2=points.copy()[:,:2]
+	points2=points.copy()
 	points2=whiten(points2)
 	#1. 层次聚类
 	#生成点与点之间的距离矩阵,这里用的欧氏距离:
