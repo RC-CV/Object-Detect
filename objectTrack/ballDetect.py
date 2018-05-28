@@ -11,9 +11,10 @@ def detect_video(video,ringPoint,showIt):
     bs = cv2.createBackgroundSubtractorMOG2(history=history, detectShadows=True) #这个效果最好
     bs.setHistory(history)
     img_width, img_height = camera.get(3), camera.get(4)
-    print(img_width , img_height)
+    # print(img_width , img_height)
     ball_x = 0
     ball_y = 0
+    detected = True
 
     frames = 0
     points = []
@@ -63,7 +64,7 @@ def detect_video(video,ringPoint,showIt):
                 if ball_x== 0 and ball_y ==0 and y < (img_height*0.41) and (ring_x-ring_r-50) < x < (ring_x+ring_r+50):
                     ball_x = x
                     ball_y = y
-                    print("First ball get",[ball_x ,ball_y])
+                    # print("First ball get",[ball_x ,ball_y])
                     points.append([x,y,w,h])
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 else:
@@ -75,25 +76,22 @@ def detect_video(video,ringPoint,showIt):
                             # 640，用(y ) > (ring_y + ring_r) or (y + 10) > (ring_y + ring_r)
                             # 320，用 (y ) > (ring_y + ring_r) or (y + 10) > (ring_y + ring_r) or (y+h+5) > img_height
                             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                            print("ball is done!")
+                            # print("ball is done!")
                             camera.release()
                             break
                         else:
                             ball_x = x
                             ball_y = y
                             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                            print("Next ball",[ball_x ,ball_y])
+                            # print("Next ball",[ball_x ,ball_y])
                             points.append([x,y,w,h])
                             break
 
-                    elif ball_x==0 and ball_y ==0  :
-                        print("no ball")
-                        # break
-                    elif y < ball_y:
-                        print("no ball")
+                    elif ball_x==0 and ball_y ==0  or y<ball_y:
+                        # print("no ball")
                         break
                     else:
-                        print("Scanner Moved!")
+                        # print("Scanner Moved!")
                         ball_y += (img_height*0.1)
                         break
         if(showIt):
@@ -103,10 +101,11 @@ def detect_video(video,ringPoint,showIt):
         if k == 27:
             break
     if ball_x == 0 and ball_y == 0:
-        print("Didn't throw the ball")
+        # print("Didn't throw the ball")
+        detected=False
     camera.release()
     cv2.destroyAllWindows()
-    return points
+    return points,detected
 '''
 if __name__ == '__main__':
     video = 'RightNotIn12.avi'

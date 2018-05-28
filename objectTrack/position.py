@@ -8,6 +8,7 @@ import math
 import line
 import leastsq
 import cluster
+import time
 
 def lengthRecal(rate,disHor,xPixel):
 	'''
@@ -15,7 +16,7 @@ def lengthRecal(rate,disHor,xPixel):
 	rate	---actual/pixel
 	disHor	--水平距离
 	xPixel  --环中心与图片中轴线之差
-	
+
 	Return:
 	Actual horizontal distance
 	'''
@@ -36,32 +37,33 @@ def calZ(f,radius,pixRadius):
 def imageToPoints(image,disHor,videoPath,showIt):
 	#Find circle，霍夫变换获取圆环位置
 	(x,y,r)=houghCircle.detectCircle(image,disHor,showIt)
-	
-	#Crop ball,x,y,w,h，利用前景提取获得球的位置与范围（在照片中）
-	points=np.array(ballDetect.detect_video(videoPath,(x,y,r),showIt))
 
-	return x,y,r,points
+	#Crop ball,x,y,w,h，利用前景提取获得球的位置与范围（在照片中）
+	list,isDetect=ballDetect.detect_video(videoPath,(x,y,r),showIt)
+	points=np.array(list)
+
+	return x,y,r,points,isDetect
 #计算三维坐标系
 def obtainCoordinate(image,disHor,disVer,ringActual,cameraHight,ballR,points,x,y,r):
-	
+
 
 	#coordinate in image，创建记录球实际坐标的数组
 	pointPos=np.array(points[:,0:3],dtype='float64',copy=True)
 
 	#Fetch width and height，截取球的范围数据
 	points=points[:,2:4]
-	
-	
+
+
 	#calculate ring distance，计算环的实际距离
 	length=lengthRecal(ringActual/r,disHor,x-image.shape[1]/2)
 	distance=calDistance(disVer-cameraHight,length)
 	#print("Distance",distance)
 
-	
+
 	#calculate f，计算焦距
 	f=fCalculate(distance,ringActual,r)
 	for (i,j) in zip(points,pointPos):
-		
+
 		#calculate distance，计算球半径（像素）
 		pixRadius=abs(i[0])/2
 		#print(i)
@@ -69,13 +71,13 @@ def obtainCoordinate(image,disHor,disVer,ringActual,cameraHight,ballR,points,x,y
 		#calculate distance，计算球距离（实际）
 		z=calZ(f,ballR,pixRadius)
 		#print("Ball distance:",z/100,"m")
-		
+
 		#position ---float (x,y,Z),Z-->(cm)
 		#store distance，记录球的坐标（像素）与距离（实际）
 		j[2]=z
 		j[0]+=pixRadius
 		j[1]+=(i[1]-pixRadius)
-	
+
 	#store rectangel coordinate，创建数组记录球的三维直角坐标（真实）
 	coordinate=[]
 	#get resolution,获取图片分辨率
@@ -103,6 +105,7 @@ def obtainCoordinate(image,disHor,disVer,ringActual,cameraHight,ballR,points,x,y
 	return coordinate,ringXYZ
 
 def main(videoPath,expect,showIt):
+	start = time.time()
 	'''
 	Argument:
 	disHor			--圆环中心距离机器人水平距离
@@ -117,7 +120,7 @@ def main(videoPath,expect,showIt):
 	ringActual=40
 	cameraHight=20
 	ballR=17
-	
+
 
 	disHor-=robotR
 	disVer+=ringActual
@@ -132,20 +135,22 @@ def main(videoPath,expect,showIt):
 		return
 
 	camera.release()
-	
-	x,y,r,points=imageToPoints(image,disHor,videoPath,showIt)
 
+	x,y,r,points,isDetect=imageToPoints(image,disHor,videoPath,showIt)
+
+	if(not isDetect):
+		return decide(0,expect)
 	if(len(points)>7):
 		points=cluster.clustering(points,showIt)
-	
+
 	#如果检测出来的球个数少于7个，则无法进行曲线拟合，跳出循环
 	print('points number:',len(points))
 	if(len(points)<4):
 		print("Detected Ball not enough, Exit System")
 		return decide(0,expect)
-	
+
 	coordinate,ringXYZ=obtainCoordinate(image,disHor,disVer,ringActual,cameraHight,ballR,points,x,y,r)
-	
+
 
 
 	if(max(coordinate[1])<disHor/3):
@@ -162,7 +167,8 @@ def main(videoPath,expect,showIt):
 		result=1
 	else:
 		result=0
-	return decide(result,expect)
+	print("Use {:.2f} seconds".format(time.time() - start))
+	return decide(result,expect),(bx,disHor,bz),ringXYZ
 
 def decide(result,expect):
 	if(expect==result):
@@ -171,11 +177,11 @@ def decide(result,expect):
 		return 0
 
 if __name__ == '__main__':
-	'''
-	videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/double_eye_320/leftNotIn'+str(12)+'.avi'
-	result=main(videoPath,0,True)
-	print(result)
-	#videoPath='/mnt/hgfs/Virtural Share doc/rc_data_5.24/single_eye_640/6m/NotIn4.avi'
+    showIt=True
+    videoPath='leftNotIn5.avi'
+    result,ballPos,ringPos=main(videoPath,1,showIt)
+    print(result)
+
 '''
 	showIt=False
 	success=0
@@ -206,5 +212,4 @@ if __name__ == '__main__':
 	print('Detect In Accuracy:{:.2f}'.format(100*successIn/(5.0)))
 	print('Detect out Accuracy:{:.2f}'.format(100*fail/(12.0)))
 	print('In Error video',InError,'Out Error video',outError)
-	
-
+'''

@@ -12,39 +12,19 @@ def clustering(points,showIt):
 	points2=whiten(points2)
 	#1. 层次聚类
 	#生成点与点之间的距离矩阵,这里用的欧氏距离:
-	disMat = sch.distance.pdist(points2,'euclidean') 
+	disMat = sch.distance.pdist(points2,'euclidean')
 	#进行层次聚类:
-	Z=sch.linkage(disMat,method='single') 
+	Z=sch.linkage(disMat,method='single')
 	#将层级聚类结果以树状图表示出来并保存为plot_dendrogram.png
 	P=sch.dendrogram(Z)
 	#plt.savefig('./plot_dendrogram.png')
 	#根据linkage matrix Z得到聚类结果:
-	cluster= sch.fcluster(Z, t=2, criterion='distance') 
+	cluster= sch.fcluster(Z, t=2, criterion='distance')
 
 	print ("Original cluster by hierarchy clustering:\n",cluster)
 	fig = plt2.figure()
 	ax = Axes3D(fig)
 
-	#列出实验数据
-
-	plt2.xlabel("X")
-	plt2.ylabel("Y")
-	#在图中显示各点的位置
-	for i in range(0,len(points)):
-
-	    x1i=points[i][0]
-	    x2i=points[i][1]
-	    yi=points[i][2]
-	    if(cluster[i]==1):
-	    	col='red'
-	    else:
-	    	col='blue'
-	    ax.scatter(x1i, x2i, yi, color=col)
-	    #show_point = "No."+str(i)+" ["+ str(x1i) +","+ str(x2i)+","+str(yi) + "]"
-	    show_point = "No."+str(i)
-	    ax.text(x1i,x2i,yi,show_point)
-	if(showIt):
-		plt2.show()
 
 
 	d = collections.Counter(cluster)
@@ -63,5 +43,25 @@ def clustering(points,showIt):
 	for i in range(0,len(points)):
 		if(cluster[i]==index):
 			newPoint.append(points[i])
+
+	#列出实验数据
+	plt2.xlabel("X")
+	plt2.ylabel("Y")
+	#在图中显示各点的位置
+	for i in range(0,len(points)):
+
+	    x1i=points[i][0]
+	    x2i=points[i][1]
+	    yi=points[i][2]
+	    if(cluster[i]==index):
+	    	col='red'
+	    else:
+	    	col='blue'
+	    ax.scatter(x1i, x2i, yi, color=col)
+	    #show_point = "No."+str(i)+" ["+ str(x1i) +","+ str(x2i)+","+str(yi) + "]"
+	    show_point = "No."+str(i)
+	    ax.text(x1i,x2i,yi,show_point)
+	if(showIt):
+		plt2.show()
 
 	return np.array(newPoint)
